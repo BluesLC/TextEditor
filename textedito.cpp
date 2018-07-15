@@ -4,6 +4,8 @@
 #include <QHBoxLayout>
 #include <qlabel.h>
 #include <qpalette.h>
+#include <qfont.h>
+#include <qfontdialog.h>
 
 TextEdito::TextEdito(QWidget *parent) :
     QMainWindow(parent)
@@ -31,6 +33,8 @@ void TextEdito::CreateUI()
     savefile = new QAction("savefile(&S)");//保存文件
     saveAsfile = new QAction("saveAsfile(&A)");//另存为文件
     quit = new QAction("quit(&Q)");//退出
+    connect(quit,&QAction::triggered,this,&QTextEdit::close);
+
     filemenu->addAction(newfile);
     filemenu->addAction(openfile);
     filemenu->addAction(savefile);
@@ -39,8 +43,12 @@ void TextEdito::CreateUI()
 
     editmenu = new QMenu("edit(&E)");//编辑菜单
     cut = new QAction("cut(&X)");
+    connect(cut,&QAction::triggered,textedit,&QTextEdit::cut);
     copy = new QAction("copy(&C)");
+    connect(copy,&QAction::triggered,textedit,&QTextEdit::copy);
     paste = new QAction("paste(&V)");
+    connect(paste,&QAction::triggered,textedit,&QTextEdit::paste);
+
     editmenu->addAction(cut);
     editmenu->addAction(copy);
     editmenu->addAction(paste);
@@ -48,6 +56,7 @@ void TextEdito::CreateUI()
     formatmenu = new QMenu("format(&O)");//格式菜单
     autoChage = new QAction("auto(&A)");//自动换行
     font = new QAction("font(&F)");//字体
+    connect(font,&QAction::triggered,this,&TextEdito::setFont);
     formatmenu->addAction(autoChage);
     formatmenu->addAction(font);
 
@@ -112,5 +121,11 @@ void TextEdito::resultShow(){
     else
         QMessageBox::information(this,"Atention","Didn't find anything.",QMessageBox::Ok);
 }
-//100分钟
+
+void TextEdito::setFont(){
+    bool ok;
+    QFont font = QFontDialog::getFont(&ok,this);
+    if(ok)
+        textedit->setFont(font);
+}
 

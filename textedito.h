@@ -26,6 +26,7 @@ private slots:
     void aboutText();
     void findText();
     void resultShow();
+    void setFont();
 
 private:
     void CreateUI();
